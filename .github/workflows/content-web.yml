@@ -35,7 +35,7 @@ jobs:
    # Checkout the repo
    - uses: actions/checkout@master
 
-   - name: Login to GitHub Container Registry
+   - name: Login to Azure Container Registry
      uses: docker/login-action@v1
      with:
        registry: ${{ env.containerRegistry }}
@@ -47,5 +47,4 @@ jobs:
      with:
        context: ${{ env.dockerfilePath  }}
        file: '${{ env.dockerfilePath }}/Dockerfile'
-       repository: ${{ env.imageRepository }}
        tags: ${{ env.containerRegistry }}/${{ env.imageRepository }}:${{ env.tag }},${{ env.containerRegistry }}/${{ env.imageRepository }}:latest
