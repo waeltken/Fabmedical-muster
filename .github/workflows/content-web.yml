@@ -35,13 +35,17 @@ jobs:
    # Checkout the repo
    - uses: actions/checkout@master
 
+   - name: Login to GitHub Container Registry
+     uses: docker/login-action@v1
+     with:
+       registry: ${{ env.containerRegistry }}
+       username: ${{ secrets.ACR_USERNAME }}
+       password: ${{ secrets.ACR_PASSWORD }}
+
    - name: Build and push an image to container registry
      uses: docker/build-push-action@v2
      with:
-       username: ${{ secrets.ACR_USERNAME }}
-       password: ${{ secrets.ACR_PASSWORD }}
-       path: ${{ env.dockerfilePath  }}
-       dockerfile: '${{ env.dockerfilePath }}/Dockerfile'
-       registry: ${{ env.containerRegistry }}
+       context: ${{ env.dockerfilePath  }}
+       file: '${{ env.dockerfilePath }}/Dockerfile'
        repository: ${{ env.imageRepository }}
-       tags: ${{ env.tag }},latest
+       tags: ${{ env.containerRegistry }}/${{ env.imageRepository }}:${{ env.tag }},${{ env.containerRegistry }}/${{ env.imageRepository }}:latest
